@@ -2,7 +2,7 @@
 
 Maven是一个强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，再到打包和部署。
 
-# 二、 `setting.xml`文件说明
+# 二、 setting.xml文件说明
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -276,7 +276,7 @@ under the License.
 
 # 常用依赖
 
-## `log4j`最小依赖
+## log4j最小依赖
 
 ```xml
 <dependency>
@@ -290,3 +290,26 @@ under the License.
   <version>1.7.29</version>
 </dependency>
 ```
+
+# 多个模块的项目只打包一个字模块
+
+Maven选项：
+
+- -pl, --projects list
+- -am, --also-make
+- -amd, --also-make-dependents
+
+## 单独构建子模块A，同时构建子模块A依赖的其他模块
+
+```shell
+mvn clean package -pl 子模块A -am
+```
+
+## 单独构建子模块A，同时构建依赖子模块A的其他模块
+
+```shell
+mvn clean package -pl 子模块A -amd
+```
+
+
+
