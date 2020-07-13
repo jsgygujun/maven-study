@@ -274,7 +274,7 @@ under the License.
 
 ```
 
-# 常用依赖
+# 三、常用依赖
 
 ## log4j最小依赖
 
@@ -291,7 +291,7 @@ under the License.
 </dependency>
 ```
 
-# 多个模块的项目只打包一个字模块
+# 四、多个模块的项目只打包一个字模块
 
 Maven选项：
 
@@ -311,5 +311,70 @@ mvn clean package -pl 子模块A -am
 mvn clean package -pl 子模块A -amd
 ```
 
+# 五、profile 区分开发和生产环境
+
+```xml
+<profiles>
+    <profile>
+        <!--测试环境-->
+        <id>dev</id>
+        <properties>
+            <profile.env>dev</profile.env>
+        </properties>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+    </profile>
+    <profile>
+        <!--生产环境-->
+        <id>pro</id>
+        <properties>
+            <profile.env>pro</profile.env>
+        </properties>
+    </profile>
+</profiles>
+
+<build>
+    <resources>
+        <resource>
+            <directory>${basedir}/src/main/resources</directory>
+            <excludes>
+                <exclude>**</exclude>
+            </excludes>
+        </resource>
+        <resource>
+            <directory>${basedir}/src/main/resources/${profile.env}</directory>
+        </resource>
+    </resources>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.1.1</version>
+            <configuration>
+            <!-- put your configurations here -->
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                    <excludes>
+                      <exclude>META-INF/*.SF</exclude>
+                      <exclude>META-INF/*.DSA</exclude>
+                      <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
 
 
